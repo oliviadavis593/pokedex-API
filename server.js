@@ -100,7 +100,7 @@ function handleGetPokemon(req, res) {
 //#5: constructing endpoint & creating separate middleware to handle Pokemon request
 app.get('/pokemon', handleGetPokemon) 
 
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`)
