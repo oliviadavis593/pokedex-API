@@ -3,6 +3,7 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
+const POKEDEX = require('./pokedex.json') //#10: requiring JSON pokemon data
 
 //console.log(process.env.API_TOKEN) 
 
@@ -73,12 +74,30 @@ function handleGetTypes(req, res) {
 //this constructs our endpoint & creates a separate middleware to handle the request
 app.get('/types', handleGetTypes)
 
-//#5
+//#5:creating handle request for Pokemon
 function handleGetPokemon(req, res) {
-    res.send('Hello, Pokemon!')
+    //#11: Implementing handleGetPokemon middleware
+    //Note: Check endpoints working w. Postman w. valid Auth. header
+    let response = POKEDEX.pokemon; 
+
+    //filter our pokemon by name if name query param is present
+    if (req.query.name) {
+        response = response.filter(pokemon =>
+            //case insensitive searching
+            pokemon.name.toLowerCase().includes(req.query.name)    
+        )
+    }
+
+    //filter our pokemon by type if query param is present
+    if (req.query.type) {
+        response = response.filter(pokemon => 
+            pokemon.type.includes(req.query.type)    
+        )
+    }
+    res.json(response)
 }
 
-//#5
+//#5: constructing endpoint & creating separate middleware to handle Pokemon request
 app.get('/pokemon', handleGetPokemon) 
 
 const PORT = 8000
