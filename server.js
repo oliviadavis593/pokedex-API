@@ -12,6 +12,17 @@ const app = express()
 const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 app.use(morgan(morganSetting))
 
+app.use((error, req, res, next) => {
+    let response
+
+    if (process.env.NODE_ENV === 'production') {
+        response = { error: { message: 'server error '}}
+    } else {
+        response = { error }
+    }
+    res.status(500).json(response)
+})
+
 //#6: (composing validation middleware) 
 //added app.use above both app.gets 
 //so we can add a middleware to the line before 
@@ -104,5 +115,5 @@ app.get('/pokemon', handleGetPokemon)
 const PORT = process.env.PORT || 8000
 
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`)
+  //console.log(`Server listening at http://localhost:${PORT}`)
 })
