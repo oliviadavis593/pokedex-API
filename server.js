@@ -4,7 +4,7 @@ require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
 
-console.log(process.env.API_TOKEN)
+//console.log(process.env.API_TOKEN) 
 
 const app = express()
 
@@ -16,18 +16,18 @@ app.use(morgan('dev'))
 //invoked next() at end of middleware => to move to next middleware
 //Note: Check Postman for both types => should see log outputs in terminal for every request
 app.use(function validateBearerToken(req, res, next) {
-    console.log('validate bearer token middleware')
-    //#7: reading the request header in express (Validate bearer token)
+    //console.log('validate bearer token middleware')
+    //#7A: reading the request header in express (Validate bearer token)
     //Reading Authorization => value = Bearer string 
     //console.log(req.get('Authorization'))
 
-    //#7: only care about the token for this header 
+    //#7B: only care about the token for this header 
     //Splitting the value over empty space 
     //console.log(req.get('Authorization').split(' '))
 
-    //#7: Now we have an array w. token in 2nd position
+    //#7C: Now we have an array w. token in 2nd position
     //So we can get the token: 
-    console.log(req.get('Authorization').split(' ')[1]) //returns just API_TOKEN
+    //console.log(req.get('Authorization').split(' ')[1]) //returns just API_TOKEN
 
     //#8: Updating code to store these 2 values (Validate beaer token)
     //We should be able to compare the above code w. process.env.API_TOKEN
@@ -49,9 +49,9 @@ app.use(function validateBearerToken(req, res, next) {
     //Step 9 =>  received error when there was no Auth. header at all
     //We need to check for presence of token header before we split it
     //Responding w. same error when token is present but invalid
-    if(!authToken || authToken.split(' ')[1] !== apiToken) {
+    if (!authToken || authToken.split(' ')[1] !== apiToken) {
         return res.status(401).json({ error: 'Unauthorized request' }) //now both tabs w. invalid request in Postman will work
-    }
+      }
 
     //move to the next middleware
     next() 
