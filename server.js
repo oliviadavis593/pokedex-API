@@ -9,7 +9,8 @@ const POKEDEX = require('./pokedex.json') //#10: requiring JSON pokemon data
 
 const app = express()
 
-app.use(morgan('dev'))
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
+app.use(morgan(morganSetting))
 
 //#6: (composing validation middleware) 
 //added app.use above both app.gets 
